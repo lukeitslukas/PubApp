@@ -12,8 +12,12 @@
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="menu_login">Login</string>
-    <string name="login_desc">To be able to access all features of this app, please sign in or register an account.</string>
+    <string name="login_header_desc">To be able to access all features of this app, please sign in or register an account.</string>
     <string name="button_login">Login</string>
     <string name="button_register">Register</string>
+    <string name="text_email">Email</string>
+    <string name="text_password">Password</string>
+    <string name="text_password_confirm">Confirm Password</string>
+    <string name="button_confirm_register">Create Account</string>
     <string name="title_activity_main">MainActivity</string>
 </resources>

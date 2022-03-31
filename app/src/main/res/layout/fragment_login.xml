@@ -14,7 +14,7 @@
         android:layout_marginTop="276dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="16dp"
-        android:text="@string/login_desc"
+        android:text="@string/login_header_desc"
         android:textAlignment="center"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline3"

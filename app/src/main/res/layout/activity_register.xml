@@ -14,11 +14,14 @@
         android:layout_marginEnd="64dp"
         android:layout_marginBottom="32dp"
         android:ems="10"
+        android:hint="@string/text_email"
         android:inputType="textEmailAddress"
+        android:minHeight="48dp"
         app:layout_constraintBottom_toTopOf="@+id/register_password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.506"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:autofillHints="" />
 
     <EditText
         android:id="@+id/register_password"
@@ -26,11 +29,14 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
         android:ems="10"
+        android:hint="@string/text_password"
         android:inputType="textPassword"
+        android:minHeight="48dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline4"
         app:layout_constraintEnd_toEndOf="@+id/register_email"
         app:layout_constraintHorizontal_bias="0.506"
-        app:layout_constraintStart_toStartOf="@+id/register_email" />
+        app:layout_constraintStart_toStartOf="@+id/register_email"
+        android:autofillHints="" />
 
     <EditText
         android:id="@+id/register_password_confirm"
@@ -38,17 +44,21 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:ems="10"
+        android:hint="@string/text_password_confirm"
         android:inputType="textPassword"
+        android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="@+id/register_password"
         app:layout_constraintStart_toStartOf="@+id/register_password"
-        app:layout_constraintTop_toTopOf="@+id/guideline4" />
+        app:layout_constraintTop_toTopOf="@+id/guideline4"
+        android:autofillHints="" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/register_button"
         android:layout_width="0dp"
         android:layout_height="71dp"
         android:layout_marginTop="32dp"
-        android:text="Button"
+        android:text="@string/button_confirm_register"
+        android:onClick="createAccount"
         app:layout_constraintEnd_toEndOf="@+id/register_password_confirm"
         app:layout_constraintStart_toStartOf="@+id/register_password_confirm"
         app:layout_constraintTop_toBottomOf="@+id/register_password_confirm" />

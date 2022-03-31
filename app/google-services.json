@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "618107406085",
+    "project_id": "pubapp-64a3b",
+    "storage_bucket": "pubapp-64a3b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:618107406085:android:e1ea090c1f7a998777d96c",
+        "android_client_info": {
+          "package_name": "com.ratemypub.PubApp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "618107406085-98gq3tuqtipgneql83j20vvk854hn5ok.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3naPlbE6LBIZi1doV25vK7evpyM5102M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "618107406085-98gq3tuqtipgneql83j20vvk854hn5ok.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

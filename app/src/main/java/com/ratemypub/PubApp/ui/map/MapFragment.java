@@ -169,7 +169,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        // TODO add marker to db
                         Intent intent = new Intent(getActivity(), NewPubActivity.class);
                         intent.putExtra("latLng", latLng);
                         startActivity(intent);

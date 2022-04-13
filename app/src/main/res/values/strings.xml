@@ -3,21 +3,33 @@
     <string name="title_activity_nav">Nav</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Hi!</string>
+    <string name="nav_header_title">Hi</string>
     <string name="nav_header_subtitle">Login to access all features</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
     <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
+    <string name="menu_map">Map</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="menu_login">Login</string>
+    <string name="menu_logout">Logout</string>
     <string name="login_header_desc">To be able to access all features of this app, please sign in or register an account.</string>
+    <string name="logout_header_desc">Want to logout? Click the button below!</string>
     <string name="button_login">Login</string>
+    <string name="button_logout">Logout</string>
     <string name="button_register">Register</string>
     <string name="text_email">Email</string>
     <string name="text_password">Password</string>
     <string name="text_password_confirm">Confirm Password</string>
     <string name="button_confirm_register">Create Account</string>
+    <string name="button_confirm_login">Login</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="nav_header_subtitle_loggedIn">Welcome to RateMyPub</string>
+    <string name="mapView">map</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="google_maps_api">AIzaSyDaAHSAOGqX3c4xc5u61URaXIRVJ1_0Vsk</string>
+    <string name="editText_review">Rate the pub out of 5</string>
+    <string name="textView_Location">Adding a pub at\n</string>
+    <string name="editText_placeName">Enter pub name</string>
+    <string name="button_addPub">Add Pub</string>
 </resources>

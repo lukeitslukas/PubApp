@@ -2,7 +2,10 @@ package com.ratemypub.PubApp;
 
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
+import android.widget.TextView;
 
+import com.google.android.libraries.places.api.Places;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.navigation.NavController;
@@ -15,6 +18,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.ratemypub.PubApp.databinding.ActivityMainBinding;
+
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.appBarMain.toolbar);
+
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        editHeaderText(currentUser);
     }
 
     @Override
@@ -40,22 +48,42 @@ public class MainActivity extends AppCompatActivity {
 
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
+        editHeaderText(currentUser);
 
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow, R.id.nav_login)
+                R.id.nav_home, R.id.nav_map, R.id.nav_slideshow, R.id.nav_login, R.id.nav_logout)
                 .setOpenableLayout(drawer)
                 .build();
 
         navigationView.getMenu().findItem(R.id.nav_login).setVisible(currentUser == null);
+        navigationView.getMenu().findItem(R.id.nav_logout).setVisible(currentUser != null);
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        DrawerLayout drawer = binding.drawerLayout;
+        NavigationView navigationView = binding.navView;
+
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        editHeaderText(currentUser);
+
+        navigationView.getMenu().findItem(R.id.nav_login).setVisible(currentUser == null);
+        navigationView.getMenu().findItem(R.id.nav_logout).setVisible(currentUser != null);
+
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+        NavigationUI.setupWithNavController(navigationView, navController);
+
+
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -69,5 +97,23 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    public void editHeaderText(FirebaseUser currentUser) {
+        NavigationView nav_view = (NavigationView) findViewById(R.id.nav_view);
+        View nav_view_header =  nav_view.getHeaderView(0);
+        TextView textViewEmail = (TextView) nav_view_header.findViewById(R.id.nav_header_text_main);
+        TextView textViewDesc = (TextView) nav_view_header.findViewById(R.id.nav_header_text_desc);
+
+        if (currentUser != null) {
+            textViewEmail.setText(String.format("%s, %s",
+                    getResources().getString(R.string.nav_header_title),
+                    Objects.requireNonNull(currentUser.getEmail()).split("@")[0]));
+            textViewDesc.setText(getResources().getString(R.string.nav_header_subtitle_loggedIn));
+        } else {
+            textViewEmail.setText(getResources().getString(R.string.nav_header_title));
+            textViewDesc.setText(getResources().getString(R.string.nav_header_subtitle));
+        }
+
     }
 }

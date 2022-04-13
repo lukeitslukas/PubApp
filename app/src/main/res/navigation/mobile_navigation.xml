@@ -12,10 +12,10 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.ratemypub.PubApp.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:id="@+id/nav_map"
+        android:name="com.ratemypub.PubApp.ui.map.MapFragment"
+        android:label="@string/menu_map"
+        tools:layout="@layout/fragment_map" />
 
     <fragment
         android:id="@+id/nav_slideshow"
@@ -24,7 +24,14 @@
         tools:layout="@layout/fragment_slideshow" />
     <fragment
         android:id="@+id/nav_login"
-        android:name="com.ratemypub.PubApp.ui.login.LoginFragment"
+        android:name="com.ratemypub.PubApp.ui.accounts.LoginFragment"
         android:label="@string/menu_login"
-        tools:layout="@layout/fragment_login"/>
+        tools:layout="@layout/fragment_login">
+    </fragment>
+    <activity
+        android:id="@+id/nav_logout"
+        android:name="com.ratemypub.PubApp.LogoutActivity"
+        android:label="@string/menu_logout"
+        tools:layout="@layout/activity_logout">
+    </activity>
 </navigation>

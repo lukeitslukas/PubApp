@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -52,6 +53,16 @@ public class NewPubActivity extends AppCompatActivity {
         TextView textLocation = (TextView) findViewById(R.id.text_location);
         textLocation.setText(String.format("%s%s, %s",
                 getResources().getString(R.string.textView_Location), latLngFormat.format(latLng.latitude), latLngFormat.format(latLng.longitude)));
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // if back button pressed return to map fragment
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     // on click, verify data and upload to database

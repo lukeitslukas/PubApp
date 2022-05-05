@@ -23,6 +23,7 @@ public class LogoutActivity extends AppCompatActivity {
 
         Button logout = (Button) findViewById(R.id.button_logout);
 
+        // signout user on button press and exit activity
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View root) {
@@ -30,6 +31,16 @@ public class LogoutActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 

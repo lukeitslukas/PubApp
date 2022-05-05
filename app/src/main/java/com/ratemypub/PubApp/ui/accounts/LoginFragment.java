@@ -27,15 +27,15 @@ public class LoginFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        LoginViewModel loginViewModel =
-                new ViewModelProvider(this).get(LoginViewModel.class);
 
         binding = FragmentLoginBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        // assign buttons
         Button login = (Button) root.findViewById(R.id.button_login);
         Button register = (Button) root.findViewById(R.id.button_register);
 
+        // setup button listeners to launch activity on press
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View root) {
@@ -60,9 +60,11 @@ public class LoginFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
+        // check if user is logged in
         mAuth = FirebaseAuth.getInstance();
         final NavController navController = Navigation.findNavController(this.requireActivity(), R.id.nav_host_fragment_content_main);
 
+        // move to home fragment if logged in
         try {
             FirebaseUser user = mAuth.getCurrentUser();
             if (user != null) {
@@ -78,9 +80,11 @@ public class LoginFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
+        // check if logged in
         mAuth = FirebaseAuth.getInstance();
         final NavController navController = Navigation.findNavController(this.requireActivity(), R.id.nav_host_fragment_content_main);
 
+        // move to home frament if logged in
         try {
             FirebaseUser user = mAuth.getCurrentUser();
             if (user != null) {

@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(binding.appBarMain.toolbar);
 
+        // check if user is logged in and update header
         FirebaseUser currentUser = mAuth.getCurrentUser();
         editHeaderText(currentUser);
     }
@@ -46,20 +47,25 @@ public class MainActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
 
+        // setup nav drawer
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
 
+        // check if user is logged in and update header
         FirebaseUser currentUser = mAuth.getCurrentUser();
         editHeaderText(currentUser);
 
+        // setup navbar
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home, R.id.nav_map, R.id.nav_slideshow, R.id.nav_login, R.id.nav_logout)
                 .setOpenableLayout(drawer)
                 .build();
 
+        // show login/register or logout depending on user status
         navigationView.getMenu().findItem(R.id.nav_login).setVisible(currentUser == null);
         navigationView.getMenu().findItem(R.id.nav_logout).setVisible(currentUser != null);
 
+        // finish nav setup
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
@@ -68,20 +74,22 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+        // re-setup nav drawer
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
 
+        // check if user logged in and update header
         FirebaseUser currentUser = mAuth.getCurrentUser();
         editHeaderText(currentUser);
 
+        // show login/register or logout depending on user status
         navigationView.getMenu().findItem(R.id.nav_login).setVisible(currentUser == null);
         navigationView.getMenu().findItem(R.id.nav_logout).setVisible(currentUser != null);
 
+        // finish nav setup
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
-
-
     }
 
 
@@ -100,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void editHeaderText(FirebaseUser currentUser) {
+        // show start of email in header if logged in
         NavigationView nav_view = (NavigationView) findViewById(R.id.nav_view);
         View nav_view_header =  nav_view.getHeaderView(0);
         TextView textViewEmail = (TextView) nav_view_header.findViewById(R.id.nav_header_text_main);

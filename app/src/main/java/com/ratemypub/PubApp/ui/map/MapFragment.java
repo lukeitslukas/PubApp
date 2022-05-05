@@ -1,6 +1,8 @@
 package com.ratemypub.PubApp.ui.map;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,6 +25,11 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.gms.common.internal.Constants;
+import com.google.android.gms.location.Geofence;
+import com.google.android.gms.location.GeofencingClient;
+import com.google.android.gms.location.GeofencingRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -32,6 +39,10 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -41,6 +52,7 @@ import com.ratemypub.PubApp.NewPubActivity;
 import com.ratemypub.PubApp.databinding.FragmentMapBinding;
 import com.ratemypub.PubApp.R;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -48,6 +60,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
 
     private static final String TAG = null;
     private FragmentMapBinding binding;
+    private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private final FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance("https://pubapp-64a3b-default-rtdb.europe-west1.firebasedatabase.app/");
     private final DatabaseReference databaseReference = firebaseDatabase.getReference("coordinates");
     private Marker currentLocationMarker;
@@ -58,17 +71,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        MapViewModel mapViewModel =
-                new ViewModelProvider(this).get(MapViewModel.class);
 
         binding = FragmentMapBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        // check location permissions and get current location
         requestLocationPermissions();
-
         getLocation();
 
+        // list to store added markers
         markerList = new ArrayList<>();
+
 
         SupportMapFragment mapFragment = SupportMapFragment.newInstance();
         getParentFragmentManager()
@@ -102,10 +115,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
-
+        // get map settings and enable zoom controls
         UiSettings settings = googleMap.getUiSettings();
         settings.setZoomControlsEnabled(true);
 
+        // check location permissions and enable current location
+        if (ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            googleMap.setMyLocationEnabled(true);
+        }
+
+        // setup database listener and update pub markers
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -151,32 +171,35 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
             }
         });
 
+        // move camera to centre on dundee
         googleMap.moveCamera(CameraUpdateFactory
                 .newLatLngZoom(new LatLng(56.462002, -2.970700), 12.0f));
 
-        currentLocationMarker = googleMap.addMarker(new MarkerOptions()
-                .position(currentLocation)
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
-                .title("Current Location"));
-
+        // setup long click listener
         googleMap.setOnMapLongClickListener(this::onMapLongClick);
     }
 
     public void onMapLongClick(LatLng latLng) {
-        new AlertDialog.Builder(requireActivity())
-                .setTitle("Add a pub")
-                .setMessage(String.format("Do you want to add a pub at %s, %s", latLng.latitude, latLng.longitude))
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        Intent intent = new Intent(getActivity(), NewPubActivity.class);
-                        intent.putExtra("latLng", latLng);
-                        startActivity(intent);
-                        Toast.makeText(requireActivity(), "Yaay", Toast.LENGTH_SHORT).show();
-                    }})
-                .setNegativeButton(android.R.string.no, null).show();
+        // check if logged in and if logged in launch dialog to create pub
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) {
+            new AlertDialog.Builder(requireActivity())
+                    .setTitle("Add a pub")
+                    .setMessage(String.format("Do you want to add a pub at %s, %s", latLng.latitude, latLng.longitude))
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            Intent intent = new Intent(getActivity(), NewPubActivity.class);
+                            intent.putExtra("latLng", latLng);
+                            startActivity(intent);
+                        }})
+                    .setNegativeButton(android.R.string.no, null).show();
+        } else {
+            Toast.makeText(requireActivity(), "You must be logged in to access this feature.", Toast.LENGTH_SHORT).show();
+        }
     }
 
+    // request location permissions
     private boolean requestLocationPermissions() {
         AtomicBoolean permission = new AtomicBoolean(false);
         ActivityResultLauncher<String[]> locationPermissionRequest =
@@ -207,21 +230,5 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     @Override
     public void onLocationChanged(@NonNull Location location) {
         currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
-        currentLocationMarker.setPosition(currentLocation);
-    }
-
-    @Override
-    public void onFlushComplete(int requestCode) {
-        LocationListener.super.onFlushComplete(requestCode);
-    }
-
-    @Override
-    public void onProviderEnabled(@NonNull String provider) {
-        LocationListener.super.onProviderEnabled(provider);
-    }
-
-    @Override
-    public void onProviderDisabled(@NonNull String provider) {
-        LocationListener.super.onProviderDisabled(provider);
     }
 }

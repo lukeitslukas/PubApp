@@ -32,4 +32,7 @@
     <string name="textView_Location">Adding a pub at\n</string>
     <string name="editText_placeName">Enter pub name</string>
     <string name="button_addPub">Add Pub</string>
+    <string name="button_addReview">Add Review</string>
+    <string name="editText_reviewText">Please tell us how you feel about this pub!</string>
+    <string name="button_google_login">Sign in with Google</string>
 </resources>
